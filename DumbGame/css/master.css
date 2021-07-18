@@ -1,9 +1,13 @@
-body {
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html, body {
 	color: #363636;
 	background-color: #fff;
 	font-family: 'Courier New';
-	margin: 0;
-	padding: 0;
+	height: 100%;
 }
 
 #scoreboard {
@@ -11,16 +15,15 @@ body {
 	top: 60%;
 	width: 100%;
 	text-align: center;
-	display: flex;
-	flex-direction: column;
 }
 
 #scoreboard>ul{
-	display: block;
+	text-align: center;
 	margin: auto;
 	list-style: none;
 	width: 100%;
 	max-width: 400px;
+	margin-top: 20px;
 }
 
 #scoreboard>ul>li{
@@ -30,7 +33,7 @@ body {
 	display:flex;
 	flex-direction: row;
 	justify-content: space-between;
-	margin: 10px;
+	margin: auto;
 	border: none;
 	border-radius: 5px;
 	max-width: 400px;
@@ -56,10 +59,11 @@ body {
 
 img{
 	position: absolute;
-	width: 400px;
+	width: 80%;
+	max-width: 400px;
 	left: 50%;
 	transform: translateX(-50%);
-	z-index: -1;
+	z-index: 0;
 }
 
 #score-container{
