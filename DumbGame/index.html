@@ -9,91 +9,21 @@
 	<script src="https://telegram.org/js/games.js"></script>
 	<style url="css/mas"></style>
 	<title>Dumb Game</title>
-	<style>
-		body {
-			color: #363636;
-			background-color: #fff;
-			font-family: 'Courier New';
-			margin: 0;
-			padding: 0;
-		}
-
-		#center {
-			position: absolute;
-			left: 50%;
-			top: 50%;
-			width: 60%;
-			transform: translate(-50%, -50%);
-		}
-
-		#center>span {
-			font-size: 70pt;
-			color: rgb(114, 187, 132);
-		}
-
-		#love {
-			font-size: 22pt;
-			display: inline-block;
-			position: absolute;
-			bottom: 30pt;
-			right: 30pt;
-			transform: translate(50%, 50%);
-			cursor: pointer;
-			/* overflow: hidden; */
-			/* border-radius: 50%; */
-			background-color: none;
-		}
-	</style>
+	<link rel="stylesheet" href="css/master.css">
 </head>
 
 <body>
-	<p id="center">Score: <br> <span>0</span>
-		<br> this is just a test, press the heart.
+	<p>Your score: <span>0</span> this is just a test, press the heart.
 		<button onclick="sendScore()">Set Score</button>
+		<button onclick="getScoreBoard()">Get Score Board</button>
 	</p>
+
+	<div id="scoreboard">
+	</div>
+
 	<i id="love" class="fa fa-heart"></i>
 </body>
-<script>
-	var theScore = 0;
-	var color = randomColors();
 
-	var heart = document.getElementById('love')
-	var score = document.getElementsByTagName('span')[0]
-
-	love.style['color'] = color;
-
-	love.addEventListener('click',
-		() => {
-			color = randomColors()
-			love.style['color'] = color;
-
-			theScore += 1;
-			score.innerHTML = theScore;
-		}
-	)
-
-	// random colors - taken from here:
-	// http://www.paulirish.com/2009/random-hex-color-code-snippets/
-
-	function randomColors() {
-		return '#' + Math.floor(Math.random() * 16777215).toString(16);
-	}
-
-	var userId = 652973179;
-
-	function sendScore() {
-		// var formData = new FormData();
-
-		// formData.append('user_id', userId);
-		// formData.append('score', theScore);
-
-		xhr = new XMLHttpRequest();
-		xhr.open('POST', 'http://127.0.0.1:5000/setScore', true);
-		xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-		xhr.send(JSON.stringify({ user_id: userId, score: theScore }));
-		// xhr.send(formData);
-	}
-
-</script>
+<script src="js/main.js"></script>
 
 </html>
