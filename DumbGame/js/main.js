@@ -5,17 +5,24 @@ function ge(id) {
 	return document.getElementById(id);
 }
 
-var heart = ge('love')
-var score = document.getElementsByTagName('span')[0]
+ge('score').style['color'] = color;
 
-love.style['color'] = color;
-
-love.addEventListener('click',
+ge('right').addEventListener('click',
 	() => {
 		color = randomColors()
-		love.style['color'] = color;
+		ge('score').style['color'] = color;
 
 		theScore += 1;
+		score.innerHTML = theScore;
+	}
+)
+
+ge('left').addEventListener('click',
+	() => {
+		color = randomColors()
+		ge('score').style['color'] = color;
+
+		theScore = (theScore > 0 ? theScore - 1 : 0);
 		score.innerHTML = theScore;
 	}
 )
@@ -38,6 +45,12 @@ function sendScore() {
 	xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 	xhr.send(JSON.stringify({ data: TelegramGameProxy.initParams['data'], score: theScore }));
 	// xhr.send(formData);
+
+	xhr.onreadystatechange = function () {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			getScoreBoard();
+		}
+	}
 }
 
 
@@ -67,3 +80,10 @@ function setScoreBoardHTML(scoreList) {
 		ul.appendChild(li);
 	});
 }
+
+
+function main() {
+	getScoreBoard();
+}
+
+window.onload = main;

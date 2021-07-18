@@ -13,15 +13,19 @@
 </head>
 
 <body>
-	<p>Your score: <span>0</span> this is just a test, press the heart.
-		<button onclick="sendScore()">Set Score</button>
-		<button onclick="getScoreBoard()">Get Score Board</button>
-	</p>
+	<img src="images/dumbgame.png" alt="DumbGame">
+
+	<div id="score-container">
+		<div id="score">0</div>
+		<div id="button-div">
+			<button id="left"><i class="fa fa-minus" aria-hidden="true"></i></button>
+			<button id="send" onclick="sendScore()">Set Score</button>
+			<button id="right"><i class="fa fa-plus" aria-hidden="true"></i></button>
+		</div>
+	</div>
 
 	<div id="scoreboard">
 	</div>
-
-	<i id="love" class="fa fa-heart"></i>
 </body>
 
 <script src="js/main.js"></script>

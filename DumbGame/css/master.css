@@ -6,44 +6,21 @@ body {
 	padding: 0;
 }
 
-#center {
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	width: 60%;
-	transform: translate(-50%, -50%);
-}
-
-#center>span {
-	font-size: 70pt;
-	color: rgb(114, 187, 132);
-}
-
-#love {
-	font-size: 22pt;
-	display: inline-block;
-	position: absolute;
-	bottom: 30pt;
-	right: 30pt;
-	transform: translate(50%, 50%);
-	cursor: pointer;
-	/* overflow: hidden; */
-	/* border-radius: 50%; */
-	background-color: none;
-}
-
 #scoreboard {
 	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translateX(-50%);
+	top: 60%;
 	width: 100%;
 	text-align: center;
+	display: flex;
+	flex-direction: column;
 }
 
 #scoreboard>ul{
+	display: block;
+	margin: auto;
 	list-style: none;
-	/* width: ; */
+	width: 100%;
+	max-width: 400px;
 }
 
 #scoreboard>ul>li{
@@ -56,6 +33,7 @@ body {
 	margin: 10px;
 	border: none;
 	border-radius: 5px;
+	max-width: 400px;
 }
 
 #scoreboard>ul>li.current-player{
@@ -75,3 +53,53 @@ body {
 .list_score{
 	color: blue
 } */
+
+img{
+	position: absolute;
+	width: 400px;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: -1;
+}
+
+#score-container{
+	position: absolute;
+	left: 50%;
+	bottom: 55%;
+	transform: translateX(-50%);
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+}
+
+#score{
+	font-size: 70pt;
+	color: black;
+}
+
+#button-div{
+	display: flex;
+}
+
+#button-div>button{
+	border:none;
+	padding: 7px;
+}
+
+#left{
+	border-radius: 10px 0 0 10px;
+	/* background-color: rgb(105, 105, 105); */
+	width: 40px;
+	/* color: white; */
+}
+
+#right{
+	border-radius: 0 10px 10px 0;
+	/* background-color: rgb(105, 105, 105); */
+	/* color: white; */
+	width: 40px;
+}
+
+#send{
+	background-color: rgb(216, 216, 216);
+}
