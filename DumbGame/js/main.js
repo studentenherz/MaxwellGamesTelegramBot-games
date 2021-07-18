@@ -41,7 +41,7 @@ function sendScore() {
 	// formData.append('score', theScore);
 
 	xhr = new XMLHttpRequest();
-	xhr.open('POST', 'http://127.0.0.1:5000/setScore', true);
+	xhr.open('POST', 'https://maxwellgamesbot.herokuapp.com/:5000/setScore', true);
 	xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 	xhr.send(JSON.stringify({ data: TelegramGameProxy.initParams['data'], score: theScore }));
 	// xhr.send(formData);
@@ -56,7 +56,7 @@ function sendScore() {
 
 function getScoreBoard() {
 	xhr = new XMLHttpRequest();
-	xhr.open('GET', `http://127.0.0.1:5000/getScoreBoard?data=${TelegramGameProxy.initParams['data']}`, true);
+	xhr.open('GET', `https://maxwellgamesbot.herokuapp.com/:5000/getScoreBoard?data=${TelegramGameProxy.initParams['data']}`, true);
 	xhr.onreadystatechange = function () {
 		if (xhr.readyState == 4 && xhr.status == 200) {
 			var resp = JSON.parse(xhr.responseText);
