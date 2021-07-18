@@ -37,23 +37,41 @@ body {
 	left: 50%;
 	top: 50%;
 	transform: translateX(-50%);
+	width: 100%;
+	text-align: center;
 }
 
 #scoreboard>ul{
 	list-style: none;
+	/* width: ; */
 }
 
 #scoreboard>ul>li{
-	padding: 10px;
-	
+	padding: 5px 10px;
+	width: 80%;
+	height: 20px;
+	display:flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin: 10px;
+	border: none;
+	border-radius: 5px;
+}
+
+#scoreboard>ul>li.current-player{
+	background-color: rgb(233, 233, 233);
+	transform: scale(105%);
 }
 
 .list_pos{
-	font-size: larger;
 	font-weight: bold;
-	display: inline-block;
-	background-color: #528d61;
-	color: white;
-	border-radius: 20%;
-	padding: 0 4px;
+	color: rgb(99, 99, 99);
 }
+
+/* .list_name{
+	color: red;
+}
+
+.list_score{
+	color: blue
+} */

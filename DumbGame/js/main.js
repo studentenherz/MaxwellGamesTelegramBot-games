@@ -61,7 +61,9 @@ function setScoreBoardHTML(scoreList) {
 	ge('scoreboard').appendChild(ul);
 	scoreList.forEach(x => {
 		var li = document.createElement('li');
-		li.innerHTML = `<span class="list_pos">${x['position']}</span> <span class="list_name">${x['user_first_name']}</span> <span class="list_score">${x['score']}</span>`;
+		li.innerHTML = `<div><span class="list_pos">${x['position']}.</span> <span class="list_name">${x['user_first_name']}</span></div> <div class="list_score">${x['score']}</div>`;
+		if (x['current_player'])
+			li.classList.add('current-player');
 		ul.appendChild(li);
 	});
 }
