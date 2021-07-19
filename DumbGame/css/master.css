@@ -49,13 +49,20 @@ html, body {
 	color: rgb(99, 99, 99);
 }
 
-/* .list_name{
-	color: red;
+.list_name{
+	/* width: 100%; */
+	max-width: 240px;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .list_score{
-	color: blue
-} */
+	text-align: right;
+}
+
+.list_left{
+	display: flex;
+}
 
 img{
 	position: absolute;
