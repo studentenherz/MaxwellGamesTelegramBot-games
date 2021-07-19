@@ -34,6 +34,11 @@ function randomColors() {
 	return '#' + Math.floor(Math.random() * 16777215).toString(16);
 }
 
+function setScore() {
+	ge('send').disabled = true;
+	sendScore();
+}
+
 function sendScore() {
 	// var formData = new FormData();
 
@@ -82,6 +87,7 @@ function setScoreBoardHTML(scoreList) {
 		}
 		ul.appendChild(li);
 	});
+	ge('send').disabled = false;
 }
 
 
