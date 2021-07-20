@@ -72,21 +72,22 @@ function getScoreBoard() {
 }
 
 function setScoreBoardHTML(scoreList) {
-	if (scoreList.length == 0) return;
-
-	ge('scoreboard').innerHTML = '<h2>Scoreboard</h2>';
-	var ul = document.createElement('ul');
-	ge('scoreboard').appendChild(ul);
-	scoreList.forEach(x => {
-		var li = document.createElement('li');
-		li.innerHTML = `<div class="list_left"><div class="list_pos">${x['position']}.</div> <div class="list_name">${x['user_first_name']}</div></div> <div class="list_score">${x['score']}</div>`;
-		if (x['current_player']) {
-			li.classList.add('current-player');
-			ge('score').innerHTML = x['score'];
-			theScore = x['score'];
-		}
-		ul.appendChild(li);
-	});
+	if (scoreList.length > 0) {
+		ge('scoreboard').innerHTML = '<h2>Scoreboard</h2>';
+		var ul = document.createElement('ul');
+		ge('scoreboard').appendChild(ul);
+		if (scoreList.length > 0)
+			scoreList.forEach(x => {
+				var li = document.createElement('li');
+				li.innerHTML = `<div class="list_left"><div class="list_pos">${x['position']}.</div> <div class="list_name">${x['user_first_name']}</div></div> <div class="list_score">${x['score']}</div>`;
+				if (x['current_player']) {
+					li.classList.add('current-player');
+					ge('score').innerHTML = x['score'];
+					theScore = x['score'];
+				}
+				ul.appendChild(li);
+			});
+	}
 	ge('send').disabled = false;
 }
 

@@ -1,0 +1,21 @@
+html, body{
+	margin: 0;
+	padding: 0;
+	background-color: rgb(128, 128, 128);
+}
+
+svg{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	border: black solid;
+	padding: 0;
+	margin: 0;
+}
+
+path{
+	fill: black;
+	stroke-width: 0;
+	/* stroke: black; */
+} 
