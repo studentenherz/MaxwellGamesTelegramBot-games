@@ -16,6 +16,9 @@ svg{
 
 path{
 	fill: black;
-	stroke-width: 0;
-	/* stroke: black; */
+	stroke: none;
 } 
+
+circle{
+	fill: red;
+}
