@@ -14,20 +14,21 @@ function ge(id) {
 const aspect_ratio = 0.5;		// height/ width
 const portion = 0.9				// portion of the width allocated
 
-const xLine = 40;				// line in which the arrow stays
+var xLine = 40;				// line in which the arrow stays: NEEDS TO BE SCALED
 
 const dt = 10;
-const v = 0.5;					// velocity in dx/dt
-const dx = dt * v;
+const v = 0.05;					// velocity in dx/dt
+var dx = dt * v; 				// NEEDS TO BE SCALED
 
-const aw = 20;					// arrow semi width 
 const alpha = Math.PI / 4;		// angle of the zigzag
 const beta = Math.PI / 4;		// arroy tip angle  TODO: fix this doesn't work for other angles
 const sin = Math.sin(alpha);
 const cos = Math.cos(alpha);
 const tan = Math.tan(alpha);
+var aw = 3;					// arrow semi width : NEEDS TO BE SCALED
 
 // variables
+var rotated = false;	// screen rotated?
 var a; 					// arrow svg path 
 var c;					// circle 
 var scaleX;
@@ -53,18 +54,53 @@ function init() {
 	a = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 	c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
 	c.setAttribute('r', 3);
-	console.log(x0, y0);
 	c.setAttribute('cx', x0);
 	c.setAttribute('cy', y0);
 	svg.appendChild(a);
 	svg.appendChild(c);
+
+	ge('svg').addEventListener('click', zigzag);
 }
 
 function scale() {
 	svg = ge('svg');
 
-	var w = window.innerWidth * portion;
-	var h = w * aspect_ratio;
+	var w = window.innerWidth;
+	var h = window.innerHeight;
+
+	// for mobile browsers
+	if (window.visualViewport) {
+		w = window.visualViewport.width;
+		h = window.visualViewport.height;
+	}
+
+	svg.style.position = 'absolute';
+	svg.style.left = `${w / 2}px`;
+	svg.style.top = `${h / 2}px`;
+
+	// assuming mobiles with height > width would be better to rotate
+	if (h > w) {
+		rotated = true;
+		var temp = w;
+		w = h;
+		h = temp;
+	}
+
+	if (w * portion * aspect_ratio < h) {
+		w *= portion;
+		h = w * aspect_ratio;
+	}
+	else {
+		h *= portion;
+		w = h / aspect_ratio;
+	}
+
+	svg.setAttribute('width', w);
+	svg.setAttribute('height', h);
+
+	svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+
+	svg.style.transform = `translate(-${w / 2}px, -${h / 2}px)`;
 
 	scaleX = w / 100;
 	scaleY = h / 100;
@@ -72,13 +108,18 @@ function scale() {
 	x0 *= scaleX;
 	y0 *= scaleY;
 
+	aw *= scaleY;
+	dx *= scaleX
+	xLine *= scaleX;
+
 	x = x0;
 	y = y0;
 
-	svg.setAttribute('width', w);
-	svg.setAttribute('height', h);
-
-	svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+	if (rotated) {
+		svg.style.transform.transformOrigin = `${w / 2}px ${h / 2}px`;
+		svg.style.transform += ' rotate(90deg)';
+		console.log('rotated');
+	}
 }
 
 function draw() {
@@ -119,7 +160,7 @@ function moveScreen() {
 function move() {
 	moveArrow();
 	y += dx * tan * dir;
-	if (x < xLine * scaleX)
+	if (x < xLine)
 		x += dx;
 	else
 		moveScreen();
@@ -131,10 +172,14 @@ function toggle() {
 	if (!playing) {
 		interval = setInterval(move, dt);
 		playing = true;
+		ge('play-button').classList.remove('fa-play', 'centered');
+		ge('play-button').classList.add('fa-pause', 'bottom');
 	}
 	else {
 		clearInterval(interval);
 		playing = false;
+		ge('play-button').classList.remove('fa-pause', 'bottom');
+		ge('play-button').classList.add('fa-play', 'centered');
 	}
 }
 
@@ -150,4 +195,3 @@ function main() {
 }
 
 window.onload = main;
-// ge('svg').addEventListener('clickav', zigzag);
