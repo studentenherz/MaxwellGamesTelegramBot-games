@@ -10,8 +10,8 @@ svg{
 	/* left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%); */
-	/* border: black solid; */
-	background-color:rgb(165, 165, 165);
+	border: black solid;
+	background-color: rgb(119, 119, 119);
 	padding: 0;
 	margin: 0;
 }
