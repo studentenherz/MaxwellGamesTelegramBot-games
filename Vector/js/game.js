@@ -55,11 +55,16 @@ let y;
 // Generate levels from turn points
 let wX0 = 0; 				// walls initial x
 let wY0 = 0; 				// walls initial y
+let wMaxX = 0; 				// walls initial x
+let wMaxY = 0; 				// walls initial y
 let wDir0 = dir;			// walls intial direction
 let waw = 4 * aw;			// vertical width of the hallways
-let wX = [20, 10, 20, 20, 20];	// walls turning X cordinates
+let wX = [];	// walls turning X cordinates
 let wY = [];	// walls turning X cordinates
 
+function getRandomArbitrary(min, max) {
+	return Math.random() * (max - min) + min;
+}
 
 function init() {
 	scale();
@@ -69,14 +74,14 @@ function init() {
 	a = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 	bottom_wall = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 	top_wall = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-	c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-	c.setAttribute('r', 3);
-	c.setAttribute('cx', x0);
-	c.setAttribute('cy', y0);
+	// c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+	// c.setAttribute('r', 3);
+	// c.setAttribute('cx', x0);
+	// c.setAttribute('cy', y0);
 	svg.appendChild(a);
 	svg.appendChild(bottom_wall);
 	svg.appendChild(top_wall);
-	svg.appendChild(c);
+	// svg.appendChild(c);
 
 	ge('svg').addEventListener('click', zigzag);
 }
@@ -135,8 +140,19 @@ function scale() {
 	dx *= scaleX
 	xLine *= scaleX;
 
-	for (let i = 0; i < wX.length; i++) {
-		wX[i] *= scaleX;
+
+	// set up initial "map"
+	wMaxX = wX0;
+	wMaxY = wY0;
+	for (let i = 0; i < 8; i++) {
+		let deltaX = getRandomArbitrary(10, 40) * scaleX;
+		let deltaY = deltaX * tan * wDir0 * (1 - 2 * (wX.length % 2));
+		let newY = wMaxY + deltaY;
+		if (newY < 0 || newY > 100 * scaleY) i--;
+		else {
+			wX.push(deltaX);
+			wMaxY = newY;
+		}
 	}
 
 	x = x0;
@@ -168,8 +184,8 @@ function draw() {
 	a.setAttribute('d', d);
 
 	// the ball
-	c.setAttribute('cx', x);
-	c.setAttribute('cy', y);
+	// c.setAttribute('cx', x);
+	// c.setAttribute('cy', y);
 
 	// walls
 
@@ -200,6 +216,24 @@ function moveScreen() {
 	if (x0 + xs[0] < 0) {
 		x0 += xs.shift();
 		y0 += ys.shift();
+	}
+	if (wX0 + wX[0] < 0) {
+		wY0 += wX[0] * wDir0 * tan;
+		wDir0 *= -1;
+		wX0 += wX.shift();
+
+		for (let i = 0; i < 1; i++) {
+			let deltaX = getRandomArbitrary(10, 40) * scaleX;
+			let deltaY = deltaX * tan * wDir0 * (1 - 2 * (wX.length % 2));
+			let newY = wMaxY + deltaY;
+			if (newY < 0 || newY > 100 * scaleY) i--;
+			else {
+				wX.push(deltaX);
+				wMaxY = newY;
+			}
+		}
+
+		console.log(wX.length);
 	}
 }
 
