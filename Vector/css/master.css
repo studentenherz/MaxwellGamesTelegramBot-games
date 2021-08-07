@@ -1,7 +1,7 @@
 html, body{
 	margin: 0;
 	padding: 0;
-	background-color: rgb(128, 128, 128);
+	background-color: rgb(0, 0, 0);
 	color: #222222;
 }
 
@@ -10,7 +10,9 @@ svg{
 	/* left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%); */
-	border: black solid;
+	border: none;
+	border-top: 10px black solid;
+	border-bottom: 10px black solid;
 	background-color: rgb(119, 119, 119);
 	padding: 0;
 	margin: 0;
@@ -42,14 +44,10 @@ circle{
 	font-size: 48pt;
 }
 
-/* @media screen and (min-width: 320px) and (max-width: 767px) and (orientation: landscape) {
-	html {
-	  transform: rotate(-90deg);
-	  transform-origin: left top;
-	  width: 100vh;
-	  overflow-x: hidden;
-	  position: absolute;
-	  top: 100%;
-	  left: 0;
-	}
-  } */
+#score{
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	color: white;
+	font-size: xx-large;
+}

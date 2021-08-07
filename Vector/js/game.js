@@ -12,13 +12,13 @@ function ge(id) {
 
 // constants
 const aspect_ratio = 0.5;		// height/ width
-const portion = 0.9				// portion of the width allocated
+const portion = 1				// portion of the width allocated
 
-var xLine = 40;				// line in which the arrow stays: NEEDS TO BE SCALED
+let xLine = 40;				// line in which the arrow stays: NEEDS TO BE SCALED
 
 const dt = 10;
 const v = 0.03;					// velocity in dx/dt
-var dx = dt * v; 				// NEEDS TO BE SCALED
+let dx = dt * v; 				// NEEDS TO BE SCALED
 
 const alpha = Math.PI / 4;		// angle of the zigzag
 const beta = Math.PI / 4;		// arroy tip angle  TODO: fix this doesn't work for other angles
@@ -29,34 +29,36 @@ const tan = Math.tan(alpha);
 const sinb = Math.sin(beta);
 const cosb = Math.cos(beta);
 const tanb = Math.tan(beta);
-var aw = 3;					// arrow semi width : NEEDS TO BE SCALED
+let aw = 3;					// arrow semi width : NEEDS TO BE SCALED
+
+let score = 0;
 
 // variables
-var rotated = false;	// screen rotated?
-var a; 					// arrow svg path 
-var c;					// circle 
-var scaleX;
-var scaleY;
-var interval;
-var playing = false;
-var dir = -1;
+let rotated = false;	// screen rotated?
+let a; 					// arrow svg path 
+let c;					// circle 
+let scaleX;
+let scaleY;
+let interval;
+let playing = false;
+let dir = -1;
 
-var x0 = 0;
-var y0 = 100;
+let x0 = 0;
+let y0 = 100;
 
-var xs = [0];
-var ys = [0];
+let xs = [0];
+let ys = [0];
 
-var x;
-var y;
+let x;
+let y;
 
 // Generate levels from turn points
-var wX0 = 0; 				// walls initial x
-var wY0 = 0; 				// walls initial y
-var wDir0 = dir;			// walls intial direction
-var waw = 4 * aw;			// vertical width of the hallways
-var wX = [20, 10, 20, 20, 20];	// walls turning X cordinates
-var wY = [];	// walls turning X cordinates
+let wX0 = 0; 				// walls initial x
+let wY0 = 0; 				// walls initial y
+let wDir0 = dir;			// walls intial direction
+let waw = 4 * aw;			// vertical width of the hallways
+let wX = [20, 10, 20, 20, 20];	// walls turning X cordinates
+let wY = [];	// walls turning X cordinates
 
 
 function init() {
@@ -82,8 +84,8 @@ function init() {
 function scale() {
 	svg = ge('svg');
 
-	var w = window.innerWidth;
-	var h = window.innerHeight;
+	let w = window.innerWidth;
+	let h = window.innerHeight;
 
 	// for mobile browsers
 	if (window.visualViewport) {
@@ -98,7 +100,7 @@ function scale() {
 	// assuming mobiles with height > width would be better to rotate
 	if (h > w) {
 		rotated = true;
-		var temp = w;
+		let temp = w;
 		w = h;
 		h = temp;
 	}
@@ -133,7 +135,7 @@ function scale() {
 	dx *= scaleX
 	xLine *= scaleX;
 
-	for (var i = 0; i < wX.length; i++) {
+	for (let i = 0; i < wX.length; i++) {
 		wX[i] *= scaleX;
 	}
 
@@ -149,8 +151,8 @@ function scale() {
 
 function draw() {
 	// draw arrow
-	var d = `M${x0} ${y0 + aw}`;
-	for (var i = 0; i < xs.length - 1; i++)
+	let d = `M${x0} ${y0 + aw}`;
+	for (let i = 0; i < xs.length - 1; i++)
 		d += ` l${xs[i]} ${ys[i]}`;
 	d += ` l${xs[xs.length - 1] - aw * sin * cos * dir} ${ys[xs.length - 1] - aw * sin * sin}`;
 	dd = aw * cos / cosb;
@@ -159,7 +161,7 @@ function draw() {
 	// d += ` l${2 * aw * cos * sin * dir} ${- 2 * aw * cos * cos}`;
 	d += ` l${- dir * aw * sin * cos - xs[xs.length - 1]} ${- aw * sin * sin - ys[xs.length - 1]}`;
 	// d += `v${- 2 * aw}`
-	for (var i = xs.length - 2; i >= 0; i--)
+	for (let i = xs.length - 2; i >= 0; i--)
 		d += ` l${-xs[i]} ${-ys[i]}`;
 	d += 'z';
 
@@ -174,7 +176,7 @@ function draw() {
 	d1 = `M${wX0} ${wY0 + waw}`;
 	d2 = `M${wX0} ${wY0 - waw}`;
 
-	for (var i = 0; i < wX.length; i++) {
+	for (let i = 0; i < wX.length; i++) {
 		d1 += `l${wX[i]} ${wX[i] * wDir0 * tan * (1 - 2 * (i % 2))}`;
 		d2 += `l${wX[i]} ${wX[i] * wDir0 * tan * (1 - 2 * (i % 2))}`;
 	}
@@ -235,20 +237,22 @@ function zigzag() {
 	dir *= -1;
 	xs.push(0);
 	ys.push(0);
+	score++;
+	ge('score').innerHTML = score;
 }
 
 function collision() {
-	var tipX = x + aw * cos * tanb * cos;
-	var tipY = y + aw * cos * tanb * sin * dir;
+	let tipX = x + aw * cos * tanb * cos;
+	let tipY = y + aw * cos * tanb * sin * dir;
 
 	if (tipY < 0 || tipY > 100 * scaleY) return true;
 
-	var hallDir = wDir0;
+	let hallDir = wDir0;
 
-	var tempX = wX0;
-	var tempY = wY0;
+	let tempX = wX0;
+	let tempY = wY0;
 
-	for (var i = 0; i < wX.length; i++) {
+	for (let i = 0; i < wX.length; i++) {
 		if (tempX <= tipX && tipX <= tempX + wX[i]) {
 			tempY += (tipX - tempX) * hallDir * tan;
 			return Math.abs(tipY - tempY) > waw;
