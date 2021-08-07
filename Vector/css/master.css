@@ -2,17 +2,19 @@ html, body{
 	margin: 0;
 	padding: 0;
 	background-color: rgb(0, 0, 0);
-	color: #222222;
+	color: #181717;
+	font-size: large;
 }
 
 svg{
+	z-index: 1;
 	/* position: absolute; */
 	/* left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%); */
 	border: none;
-	border-top: 10px black solid;
-	border-bottom: 10px black solid;
+	/* border-top: 10px black solid; */
+	/* border-bottom: 10px black solid; */
 	background-color: rgb(255, 255, 255);
 	padding: 0;
 	margin: 0;
@@ -39,15 +41,57 @@ circle{
 	top: 90%;
 }
 
-#play-button{
-	transform: translate(-50%, -50%);
-	font-size: 48pt;
-}
-
-#score{
+/* #score{
 	position: absolute;
 	right: 5px;
 	top: 5px;
 	color: white;
 	font-size: xx-large;
+} */
+
+#game-over{
+	font-family: Roboto;
+	background-color: #f3f3f3;
+	width: 40vw;
+	/* height: 40vh; */
+	z-index: -1;
+	position: absolute;
+	left: 50vw;
+	top: 50vh;
+	transform: translate(-50%, -50%);
+	text-align: center;
+	border-radius: 10px;
+	opacity: 0;
+	transition: linear opacity 0.08s;
+	padding: 20px;
+}
+
+#game-over.rotated{
+	width: 40vh;
+	/* height: 40vw; */
+	transform-origin: 20vh 20vw;
+	transform: translate(-20vh, -20vw) rotate(90deg);
+	/* transform: rotate(90deg); */
+}
+
+#game-over h3{
+	font-weight: normal;
+	font-size: larger;
+	margin: 0;
+}
+
+#game-over #score{
+	font-size: xxx-large;
+	margin: 10px;
+}
+
+#game-over button{
+	margin: 0;
+	background-color: transparent;
+	border-radius: 5px;
+	border: 1px solid rgb(78, 78, 78);
+	padding: 5px;
+	color: inherit;
+	font-size: 12pt;
+
 }

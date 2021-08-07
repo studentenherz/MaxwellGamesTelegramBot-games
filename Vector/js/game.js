@@ -32,6 +32,7 @@ const tanb = Math.tan(beta);
 let aw = 3;					// arrow semi width : NEEDS TO BE SCALED
 
 let score = 0;
+let gameOver = false;
 
 // variables
 let rotated = false;	// screen rotated?
@@ -161,6 +162,8 @@ function scale() {
 	if (rotated) {
 		svg.style.transform.transformOrigin = `${w / 2}px ${h / 2}px`;
 		svg.style.transform += ' rotate(90deg)';
+
+		ge('game-over').classList.add('rotated');
 		console.log('rotated');
 	}
 }
@@ -240,7 +243,7 @@ function moveScreen() {
 function move() {
 	if (collision()) {
 		toggle();
-		location.reload();
+		gameOverDialog();
 	}
 	moveArrow();
 	y += dx * tan * dir;
@@ -253,21 +256,22 @@ function move() {
 
 
 function toggle() {
+	if (gameOver) return;
 	if (!playing) {
 		interval = setInterval(move, dt);
 		playing = true;
-		ge('play-button').classList.remove('fa-play', 'centered');
-		ge('play-button').classList.add('fa-pause', 'bottom');
 	}
 	else {
 		clearInterval(interval);
 		playing = false;
-		ge('play-button').classList.remove('fa-pause', 'bottom');
-		ge('play-button').classList.add('fa-play', 'centered');
 	}
 }
 
 function zigzag() {
+	if (!playing) {
+		toggle();
+		return;
+	}
 	dir *= -1;
 	xs.push(0);
 	ys.push(0);
@@ -298,6 +302,13 @@ function collision() {
 	}
 
 	return false;
+}
+
+function gameOverDialog() {
+	ge('game-over').style.zIndex = 100;
+	ge('game-over').style.opacity = 100;
+	gameOver = true;
+	// alert('Game Over');
 }
 
 function main() {

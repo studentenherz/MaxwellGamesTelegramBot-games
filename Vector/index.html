@@ -16,8 +16,11 @@
 	<svg id="svg" preserveAspectRatio="xMinYMin meet" width="800" height="600" viewBox="0 0 800 600" version="1.1"
 		xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
 	</svg>
-	<i id="play-button" onclick="toggle()" class="fa fa-play centered" aria-hidden="true"></i>
-	<p id="score">0</p>
+	<div id="game-over">
+		<h3>Your score:</h3>
+		<p id="score">0</p>
+		<button onclick="location.reload()">Play Again</button>
+	</div>
 
 </body>
 
