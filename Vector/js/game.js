@@ -308,8 +308,72 @@ function gameOverDialog() {
 	ge('game-over').style.zIndex = 100;
 	ge('game-over').style.opacity = 100;
 	gameOver = true;
-	// alert('Game Over');
+	setScoreBoardHTMLLoader();
+	sendScore();
 }
+
+
+
+// the scores comunication
+function sendScore() {
+	// var formData = new FormData();
+
+	// formData.append('user_id', userId);
+	// formData.append('score', theScore);
+
+	xhr = new XMLHttpRequest();
+	xhr.open('POST', 'https://maxwellgamesbot.herokuapp.com/setScore', true);
+	xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	xhr.send(JSON.stringify({ data: TelegramGameProxy.initParams['data'], score: score }));
+	// xhr.send(formData);
+
+	xhr.onreadystatechange = function () {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			getScoreBoard();
+		}
+	}
+}
+
+
+function getScoreBoard() {
+	xhr = new XMLHttpRequest();
+	xhr.open('GET', `https://maxwellgamesbot.herokuapp.com/getScoreBoard?data=${TelegramGameProxy.initParams['data']}`, true);
+	xhr.onreadystatechange = function () {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			var resp = JSON.parse(xhr.responseText);
+			setScoreBoardHTML(resp);
+		}
+	};
+	xhr.send();
+}
+
+function setScoreBoardHTMLLoader() {
+	ge('scoreboard').innerHTML = '<h3>Scoreboard</h3>  <div class="loader"></div> ';
+}
+
+function setScoreBoardHTML(scoreList) {
+	if (scoreList.length > 0) {
+		ge('scoreboard').innerHTML = '<h3>Scoreboard</h3>';
+		var ul = document.createElement('ul');
+		ge('scoreboard').appendChild(ul);
+		if (scoreList.length > 0)
+			scoreList.forEach(x => {
+				var li = document.createElement('li');
+				li.innerHTML = `<div class="list_left"><div class="list_pos">${x['position']}.</div> <div class="list_name">${x['user_first_name']}</div></div> <div class="list_score">${x['score']}</div>`;
+				if (x['current_player']) {
+					li.classList.add('current-player');
+				}
+				ul.appendChild(li);
+			});
+	}
+}
+
+
+
+
+
+
+
 
 function main() {
 	init();
