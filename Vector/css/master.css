@@ -20,10 +20,18 @@ svg{
 	margin: 0;
 }
 
+svg.inverted{
+	background-color: black;
+}
+
 path{
 	fill: black;
 	stroke: none;
 } 
+
+path.inverted{
+	fill: rgb(255, 255, 255);
+}
 
 circle{
 	fill: red;

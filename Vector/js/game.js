@@ -277,6 +277,11 @@ function zigzag() {
 	ys.push(0);
 	score++;
 	ge('score').innerHTML = score;
+
+	if (getRandomArbitrary(1, 100) > 90) {
+		document.getElementsByTagName('svg')[0].classList.toggle('inverted');
+		[...document.getElementsByTagName('path')].forEach(x => x.classList.toggle('inverted'))
+	}
 }
 
 function collision() {
