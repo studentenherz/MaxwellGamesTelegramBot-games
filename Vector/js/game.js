@@ -17,7 +17,7 @@ const portion = 1				// portion of the width allocated
 let xLine = 40;				// line in which the arrow stays: NEEDS TO BE SCALED
 
 const dt = 10;
-const v = 0.03;					// velocity in dx/dt
+const v = 0.03 / 10;					// velocity in dx/dt
 let dx = dt * v; 				// NEEDS TO BE SCALED
 
 const alpha = Math.PI / 4;		// angle of the zigzag
@@ -288,7 +288,7 @@ function collision() {
 	let tipX = x + aw * cos * tanb * cos;
 	let tipY = y + aw * cos * tanb * sin * dir;
 
-	if (tipY < 0 || tipY > 100 * scaleY) return true;
+	// if (tipY < 0 || tipY > 100 * scaleY) return true;
 
 	let hallDir = wDir0;
 
