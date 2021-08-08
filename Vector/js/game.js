@@ -278,7 +278,7 @@ function zigzag() {
 	score++;
 	ge('score').innerHTML = score;
 
-	if (getRandomArbitrary(1, 100) > 90) {
+	if (getRandomArbitrary(1, 100) > 85) {
 		document.getElementsByTagName('svg')[0].classList.toggle('inverted');
 		[...document.getElementsByTagName('path')].forEach(x => x.classList.toggle('inverted'))
 	}

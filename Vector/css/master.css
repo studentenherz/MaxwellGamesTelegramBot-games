@@ -18,6 +18,7 @@ svg{
 	background-color: rgb(255, 255, 255);
 	padding: 0;
 	margin: 0;
+	transition: background-color ease-in-out 0.4s;
 }
 
 svg.inverted{
@@ -27,6 +28,7 @@ svg.inverted{
 path{
 	fill: black;
 	stroke: none;
+	transition: fill ease-in-out 0.4s;
 } 
 
 path.inverted{
