@@ -1,0 +1,28 @@
+{
+  "name": "",
+  "css_prefix_text": "icon-",
+  "css_use_suffix": false,
+  "hinting": true,
+  "units_per_em": 1000,
+  "ascent": 850,
+  "glyphs": [
+    {
+      "uid": "2105aa6ffb4434ebf82a20d97ac1ed25",
+      "css": "help-circled",
+      "code": 59392,
+      "src": "elusive"
+    },
+    {
+      "uid": "a7289537a68b15b24bd4e3ee1ac20dfa",
+      "css": "help",
+      "code": 59393,
+      "src": "elusive"
+    },
+    {
+      "uid": "3fe5b810589a16bc691e3e979b2789dc",
+      "css": "warning",
+      "code": 59394,
+      "src": "elusive"
+    }
+  ]
+}

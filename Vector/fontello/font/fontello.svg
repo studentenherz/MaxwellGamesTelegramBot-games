@@ -1,0 +1,16 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>Copyright (C) 2021 by original authors @ fontello.com</metadata>
+<defs>
+<font id="fontello" horiz-adv-x="1000" >
+<font-face font-family="fontello" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
+<missing-glyph horiz-adv-x="1000" />
+<glyph glyph-name="help-circled" unicode="&#xe800;" d="M0 350q0 207 147 354t353 146 354-146 146-354-146-354-354-146-353 146-147 354z m316 264q-3-49 12-57l57 0q21 47 70 45 33 0 58-32t10-66q-9-23-29-55t-31-56q-20-41-21-90t21-97l70-2q-8 41 9 79t58 89 45 56q25 39 32 62t7 59q0 71-49 121-53 55-145 55-47 0-109-37t-65-74z m94-553q0-35 25-61t59-25 61 25 25 61-25 60-61 24-59-24-25-60z" horiz-adv-x="1000" />
+
+<glyph glyph-name="help" unicode="&#xe801;" d="M0 704q2 48 85 97t147 49q122 0 192-72 66-69 66-162 0-49-10-79t-44-83q-4-8-59-76t-77-119-13-104l-94 2q-29 66-26 131t28 119q14 31 40 74t40 74q20 45-13 89t-76 44q-39 0-60-15t-34-48l-76 0q-22 12-16 79z m123-741q0 47 33 80t80 34 80-34 34-80-34-80-80-33-80 33-33 80z" horiz-adv-x="490" />
+
+<glyph glyph-name="warning" unicode="&#xe802;" d="M0-150l500 1000 500-1000-1000 0z m461 180l78 0 0 82-78 0 0-82z m0 342l19-186 40 0 19 186 0 130-78 0 0-130z" horiz-adv-x="1000" />
+</font>
+</defs>
+</svg>

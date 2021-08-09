@@ -84,7 +84,24 @@ function init() {
 	svg.appendChild(top_wall);
 	// svg.appendChild(c);
 
-	ge('svg').addEventListener('click', zigzag);
+	// ge('svg').addEventListener('click', zigzag);
+
+	ge('svg').addEventListener('touchstart', e => {
+		e.preventDefault();  // this is to prevent from waiting
+		e.stopPropagation(); // this I don't know if actually helps
+		zigzag()
+	});
+
+	document.addEventListener('keydown', e => {
+		e.preventDefault();
+		zigzag()
+	});
+
+
+	// ge('svg').addEventListener('touchstart', () => console.log('touchstart'));
+	// ge('svg').addEventListener('touchend', () => console.log('touchend'));
+	// ge('svg').addEventListener('mousedown', () => console.log('mousedown'));
+	// ge('svg').addEventListener('mouseup', () => console.log('mouseup'));
 }
 
 function scale() {
@@ -164,6 +181,7 @@ function scale() {
 		svg.style.transform += ' rotate(90deg)';
 
 		ge('game-over').classList.add('rotated');
+		ge('help').classList.add('rotated');
 		console.log('rotated');
 	}
 }
@@ -268,8 +286,10 @@ function toggle() {
 }
 
 function zigzag() {
+	console.log('zigzag');
 	if (!playing) {
 		toggle();
+		ge('help').style.display = 'none';
 		return;
 	}
 	dir *= -1;
