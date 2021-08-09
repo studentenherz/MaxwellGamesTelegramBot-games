@@ -16,7 +16,7 @@ const portion = 1				// portion of the width allocated
 
 let xLine = 40;				// line in which the arrow stays: NEEDS TO BE SCALED
 
-const dt = 10;
+const dt = 15;
 const v = 0.03;					// velocity in dx/dt
 let dx = dt * v; 				// NEEDS TO BE SCALED
 
@@ -182,7 +182,7 @@ function scale() {
 
 		ge('game-over').classList.add('rotated');
 		ge('help').classList.add('rotated');
-		console.log('rotated');
+		// console.log('rotated');
 	}
 }
 
@@ -254,7 +254,7 @@ function moveScreen() {
 			}
 		}
 
-		console.log(wX.length);
+		// console.log(wX.length);
 	}
 }
 
@@ -286,7 +286,7 @@ function toggle() {
 }
 
 function zigzag() {
-	console.log('zigzag');
+	// console.log('zigzag');
 	if (!playing) {
 		toggle();
 		ge('help').style.display = 'none';
