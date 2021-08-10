@@ -53,6 +53,9 @@ let ys = [0];
 let x;
 let y;
 
+let startTime = new Date();
+let timeNow = new Date();
+
 // Generate levels from turn points
 let wX0 = 0; 				// walls initial x
 let wY0 = 0; 				// walls initial y
@@ -162,7 +165,7 @@ function scale() {
 	// set up initial "map"
 	wMaxX = wX0;
 	wMaxY = wY0;
-	for (let i = 0; i < 8; i++) {
+	for (let i = 0; i < 12; i++) {
 		let deltaX = getRandomArbitrary(10, 40) * scaleX;
 		let deltaY = deltaX * tan * wDir0 * (1 - 2 * (wX.length % 2));
 		let newY = wMaxY + deltaY;
@@ -258,7 +261,20 @@ function moveScreen() {
 	}
 }
 
+let startedTiming = false;
+
 function move() {
+	if (startedTiming) {
+		timeNow = Date.now();
+		let realDt = (timeNow - startTime);
+		dx = v * realDt * scaleX;
+	}
+	else {
+		startedTiming = true;
+	}
+	timeNow = Date.now();
+	startTime = timeNow;
+
 	if (collision()) {
 		toggle();
 		gameOverDialog();
