@@ -166,7 +166,7 @@ function scale() {
 	wMaxX = wX0;
 	wMaxY = wY0;
 	for (let i = 0; i < 12; i++) {
-		let deltaX = getRandomArbitrary(10, 40) * scaleX;
+		let deltaX = getRandomArbitrary(25, 38) * scaleX;
 		let deltaY = deltaX * tan * wDir0 * (1 - 2 * (wX.length % 2));
 		let newY = wMaxY + deltaY;
 		if (newY < 0 || newY > 100 * scaleY) i--;
@@ -247,7 +247,7 @@ function moveScreen() {
 		wX0 += wX.shift();
 
 		for (let i = 0; i < 1; i++) {
-			let deltaX = getRandomArbitrary(10, 40) * scaleX;
+			let deltaX = getRandomArbitrary(25 - 15 * Math.max(score / 70, 1), 38) * scaleX;
 			let deltaY = deltaX * tan * wDir0 * (1 - 2 * (wX.length % 2));
 			let newY = wMaxY + deltaY;
 			if (newY < 0 || newY > 100 * scaleY) i--;
@@ -301,6 +301,9 @@ function toggle() {
 	}
 }
 
+let colorInitialScore = 0;
+const minTunrsBeforeColorFlip = 8;
+
 function zigzag() {
 	// console.log('zigzag');
 	if (!playing) {
@@ -314,10 +317,32 @@ function zigzag() {
 	score++;
 	ge('score').innerHTML = score;
 
-	if (getRandomArbitrary(1, 100) > 85) {
-		document.getElementsByTagName('svg')[0].classList.toggle('inverted');
-		[...document.getElementsByTagName('path')].forEach(x => x.classList.toggle('inverted'))
+	if (score - colorInitialScore > minTunrsBeforeColorFlip && getRandomArbitrary(1, 100) > 90) {
+		colorFlip();
 	}
+
+	if (score >= 30 && score % 10 == 0 && getRandomArbitrary(0, 100) > 50)
+		if (getRandomArbitrary(0, 100) > 50)
+			rotateScreen();
+		else
+			flipScreenX();
+}
+
+function colorFlip() {
+	svg.style.transition = ' background-color ease-in-out 0.4s';
+	colorInitialScore = score;
+	document.getElementsByTagName('svg')[0].classList.toggle('inverted');
+	[...document.getElementsByTagName('path')].forEach(x => x.classList.toggle('inverted'));
+}
+
+function rotateScreen() {
+	svg.style.transition = ' transform 2s ease-in-out';
+	ge('svg').style.transform += ' rotate(180deg)';
+}
+
+function flipScreenX() {
+	svg.style.transition = ' transform .2s linear';
+	ge('svg').style.transform += ' scaleX(-1)';
 }
 
 function collision() {

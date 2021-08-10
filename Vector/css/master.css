@@ -18,12 +18,23 @@ svg{
 	background-color: rgb(255, 255, 255);
 	padding: 0;
 	margin: 0;
-	transition: background-color ease-in-out 0.4s;
 }
 
 svg.inverted{
 	background-color: black;
 }
+
+/* svg.rotated-normal{
+	transform: rotate(90deg);
+}
+
+svg.rotated-rotated{
+	transform: rotate(270deg);
+}
+
+svg.rotated{
+	transform: rotate(180deg);
+} */
 
 path{
 	fill: black;
