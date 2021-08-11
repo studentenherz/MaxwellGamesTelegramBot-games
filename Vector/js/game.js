@@ -265,7 +265,7 @@ function moveScreen() {
 		wX0 += wX.shift();
 
 		for (let i = 0; i < 1; i++) {
-			let deltaX = getRandomArbitrary(25 - 15 * Math.min(score / 70, 1), 38) * scaleX;
+			let deltaX = getRandomArbitrary(25 - 18 * Math.min(score / 70, 1), 38) * scaleX;
 			let deltaY = deltaX * tan * wDir0 * (1 - 2 * (wX.length % 2));
 			let newY = wMaxY + deltaY;
 			if (newY - waw < 0 || newY + waw > 100 * scaleY) i--;
