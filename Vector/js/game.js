@@ -202,6 +202,7 @@ function scale() {
 
 		ge('game-over').classList.add('rotated');
 		ge('help').classList.add('rotated');
+		ge('status-bar').classList.add('rotated');
 		// console.log('rotated');
 	}
 }
@@ -264,7 +265,7 @@ function moveScreen() {
 		wX0 += wX.shift();
 
 		for (let i = 0; i < 1; i++) {
-			let deltaX = getRandomArbitrary(25 - 15 * Math.max(score / 70, 1), 38) * scaleX;
+			let deltaX = getRandomArbitrary(30 - 15 * Math.min(score / 70, 1), 38) * scaleX;
 			let deltaY = deltaX * tan * wDir0 * (1 - 2 * (wX.length % 2));
 			let newY = wMaxY + deltaY;
 			if (newY - waw < 0 || newY + waw > 100 * scaleY) i--;
@@ -319,7 +320,7 @@ function toggle() {
 }
 
 let colorInitialScore = 0;
-const minTunrsBeforeColorFlip = 8;
+const minTunrsBeforeColorFlip = 10;
 
 function zigzag() {
 	// console.log('zigzag');
@@ -332,7 +333,9 @@ function zigzag() {
 	xs.push(0);
 	ys.push(0);
 	score++;
-	ge('score').innerHTML = score;
+	document.querySelectorAll('.score').forEach(x => {
+		x.innerHTML = score;
+	});
 
 	if (score - colorInitialScore > minTunrsBeforeColorFlip && getRandomArbitrary(1, 100) > 90) {
 		colorFlip();

@@ -8,7 +8,7 @@ html, body{
 
 svg{
 	z-index: 1;
-	/* border: ; */
+	border: none;
 	padding: 0;
 	margin: 0;
 }
@@ -42,10 +42,6 @@ path{
 
 path.inverted{
 	fill: rgb(255, 255, 255);
-}
-
-circle{
-	fill: red;
 }
 
 .centered{
@@ -101,7 +97,7 @@ h3{
 	margin-top: 20px;
 }
 
-#game-over #score{
+#game-over .score{
 	font-size: xxx-large;
 	margin: 10px;
 }
@@ -291,4 +287,25 @@ h3{
 
 #back.inverted{
 	background-color:white;
+}
+
+#status-bar{
+	position: absolute;
+	z-index: 200;
+	position: absolute;
+	left: 50vw;
+	width: max-content;
+	background-color: rgb(233, 233, 233);
+	border: none;
+	border-radius: 5px;
+	margin: 0;
+	padding: 5px;
+	/* transition: transform 3s; */
+}
+
+#status-bar.rotated{
+	left: 96vw;
+	bottom: 11vh;
+	transform-origin: left top;
+	transform: rotate(90deg);
 }
