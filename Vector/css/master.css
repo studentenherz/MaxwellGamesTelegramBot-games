@@ -8,20 +8,18 @@ html, body{
 
 svg{
 	z-index: 1;
-	/* position: absolute; */
-	/* left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%); */
-	border: none;
-	/* border-top: 10px black solid; */
-	/* border-bottom: 10px black solid; */
-	background-color: rgb(255, 255, 255);
+	/* border: ; */
 	padding: 0;
 	margin: 0;
 }
 
-svg.inverted{
-	background-color: black;
+rect{
+	fill: white;
+	transition: fill ease-in-out 0.4s ;
+}
+
+rect.inverted{
+	fill: black;
 }
 
 /* svg.rotated-normal{
@@ -280,3 +278,17 @@ h3{
 	from {transform: translate(100%, 0);}
 	to {transform: translate(-50%, 0);}
 } */
+
+#back{
+	width: 100vw;
+	height: 100vh;
+	/* opacity: 0; */
+	background-color: black;
+	transition: background-color ease 0.4s;
+	z-index: -100;
+	overflow: hidden;
+}
+
+#back.inverted{
+	background-color:white;
+}

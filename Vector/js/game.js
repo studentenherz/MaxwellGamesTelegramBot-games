@@ -11,7 +11,7 @@ function ge(id) {
 }
 
 // constants
-const aspect_ratio = 0.5;		// height/ width
+const aspect_ratio = 0.55;		// height/ width
 const portion = 1				// portion of the width allocated
 
 let xLine = 40;				// line in which the arrow stays: NEEDS TO BE SCALED
@@ -38,6 +38,7 @@ let gameOver = false;
 let rotated = false;	// screen rotated?
 let a; 					// arrow svg path 
 let c;					// circle 
+let backgroundRectangle; // rectagle for background color
 let scaleX;
 let scaleY;
 let interval;
@@ -71,17 +72,18 @@ function getRandomArbitrary(min, max) {
 }
 
 function init() {
-	scale();
 
 	svg = ge('svg');
 
 	a = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 	bottom_wall = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 	top_wall = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+	backgroundRectangle = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
 	// c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
 	// c.setAttribute('r', 3);
 	// c.setAttribute('cx', x0);
 	// c.setAttribute('cy', y0);
+	svg.appendChild(backgroundRectangle);
 	svg.appendChild(a);
 	svg.appendChild(bottom_wall);
 	svg.appendChild(top_wall);
@@ -95,11 +97,18 @@ function init() {
 		zigzag()
 	});
 
+	ge('back').addEventListener('touchstart', e => {
+		e.preventDefault();  // this is to prevent from waiting
+		e.stopPropagation(); // this I don't know if actually helps
+		zigzag()
+	});
+
 	document.addEventListener('keydown', e => {
 		e.preventDefault();
 		zigzag()
 	});
 
+	scale();
 
 	// ge('svg').addEventListener('touchstart', () => console.log('touchstart'));
 	// ge('svg').addEventListener('touchend', () => console.log('touchend'));
@@ -117,6 +126,8 @@ function scale() {
 	if (window.visualViewport) {
 		w = window.visualViewport.width;
 		h = window.visualViewport.height;
+		ge('back').style.width = w;
+		ge('back').style.height = h;
 	}
 
 	svg.style.position = 'absolute';
@@ -140,10 +151,16 @@ function scale() {
 		w = h / aspect_ratio;
 	}
 
+
 	svg.setAttribute('width', w);
 	svg.setAttribute('height', h);
 
 	svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+
+	backgroundRectangle.setAttribute('x', -10);
+	backgroundRectangle.setAttribute('y', -10);
+	backgroundRectangle.setAttribute('width', `${w + 20}`);
+	backgroundRectangle.setAttribute('height', `${h + 20}`);
 
 	svg.style.transform = `translate(-${w / 2}px, -${h / 2}px)`;
 
@@ -151,7 +168,7 @@ function scale() {
 	scaleY = h / 100;
 
 	x0 *= scaleX;
-	y0 *= scaleY;
+	y0 = (y0 - waw) * scaleY;
 
 	wX0 = x0;
 	wY0 = y0;
@@ -169,7 +186,7 @@ function scale() {
 		let deltaX = getRandomArbitrary(25, 38) * scaleX;
 		let deltaY = deltaX * tan * wDir0 * (1 - 2 * (wX.length % 2));
 		let newY = wMaxY + deltaY;
-		if (newY < 0 || newY > 100 * scaleY) i--;
+		if (newY - waw < 0 || newY + waw > 100 * scaleY) i--;
 		else {
 			wX.push(deltaX);
 			wMaxY = newY;
@@ -217,12 +234,12 @@ function draw() {
 	d2 = `M${wX0} ${wY0 - waw}`;
 
 	for (let i = 0; i < wX.length; i++) {
-		d1 += `l${wX[i]} ${wX[i] * wDir0 * tan * (1 - 2 * (i % 2))}`;
-		d2 += `l${wX[i]} ${wX[i] * wDir0 * tan * (1 - 2 * (i % 2))}`;
+		d1 += ` l${wX[i]} ${wX[i] * wDir0 * tan * (1 - 2 * (i % 2))}`;
+		d2 += ` l${wX[i]} ${wX[i] * wDir0 * tan * (1 - 2 * (i % 2))}`;
 	}
 
-	d1 += `V${100 * scaleX} H${wX0} z`;
-	d2 += `V${0} H${wX0} z`;
+	d1 += ` V${110 * scaleX} H${wX0} z`;
+	d2 += ` V${-10} H${wX0} z`;
 
 	bottom_wall.setAttribute('d', d1);
 	top_wall.setAttribute('d', d2);
@@ -250,7 +267,7 @@ function moveScreen() {
 			let deltaX = getRandomArbitrary(25 - 15 * Math.max(score / 70, 1), 38) * scaleX;
 			let deltaY = deltaX * tan * wDir0 * (1 - 2 * (wX.length % 2));
 			let newY = wMaxY + deltaY;
-			if (newY < 0 || newY > 100 * scaleY) i--;
+			if (newY - waw < 0 || newY + waw > 100 * scaleY) i--;
 			else {
 				wX.push(deltaX);
 				wMaxY = newY;
@@ -329,9 +346,9 @@ function zigzag() {
 }
 
 function colorFlip() {
-	svg.style.transition = ' background-color ease-in-out 0.4s';
 	colorInitialScore = score;
-	document.getElementsByTagName('svg')[0].classList.toggle('inverted');
+	ge('back').classList.toggle('inverted')
+	document.getElementsByTagName('rect')[0].classList.toggle('inverted');
 	[...document.getElementsByTagName('path')].forEach(x => x.classList.toggle('inverted'));
 }
 
