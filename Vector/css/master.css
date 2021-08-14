@@ -40,6 +40,17 @@ path{
 	transition: fill ease-in-out 0.4s;
 } 
 
+.turner{
+	stroke: white;
+	fill: black;
+	transition: fill ease-in-out 0.4s, stroke ease-in-out 0.4s;
+}
+
+.turner.inverted{
+	stroke: black;
+	fill: white;
+}
+
 path.inverted{
 	fill: rgb(255, 255, 255);
 }

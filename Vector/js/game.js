@@ -39,6 +39,8 @@ let rotated = false;	// screen rotated?
 let a; 					// arrow svg path 
 let c;					// circle 
 let backgroundRectangle; // rectagle for background color
+let w;
+let h;
 let scaleX;
 let scaleY;
 let interval;
@@ -66,9 +68,18 @@ let wDir0 = dir;			// walls intial direction
 let waw = 4 * aw;			// vertical width of the hallways
 let wX = [];	// walls turning X cordinates
 let wY = [];	// walls turning X cordinates
+let turners = [];
+let a1s = [];
+let a2s = [];
+let circles = [];
+let inverted = false;
 
 function getRandomArbitrary(min, max) {
 	return Math.random() * (max - min) + min;
+}
+
+function getRandomInteger(n) {
+	return Math.floor(Math.random() * n);
 }
 
 function init() {
@@ -79,17 +90,11 @@ function init() {
 	bottom_wall = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 	top_wall = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 	backgroundRectangle = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-	// c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-	// c.setAttribute('r', 3);
-	// c.setAttribute('cx', x0);
-	// c.setAttribute('cy', y0);
+
 	svg.appendChild(backgroundRectangle);
 	svg.appendChild(a);
 	svg.appendChild(bottom_wall);
 	svg.appendChild(top_wall);
-	// svg.appendChild(c);
-
-	// ge('svg').addEventListener('click', zigzag);
 
 	ge('svg').addEventListener('touchstart', e => {
 		e.preventDefault();  // this is to prevent from waiting
@@ -109,18 +114,13 @@ function init() {
 	});
 
 	scale();
-
-	// ge('svg').addEventListener('touchstart', () => console.log('touchstart'));
-	// ge('svg').addEventListener('touchend', () => console.log('touchend'));
-	// ge('svg').addEventListener('mousedown', () => console.log('mousedown'));
-	// ge('svg').addEventListener('mouseup', () => console.log('mouseup'));
 }
 
 function scale() {
 	svg = ge('svg');
 
-	let w = window.innerWidth;
-	let h = window.innerHeight;
+	w = window.innerWidth;
+	h = window.innerHeight;
 
 	// for mobile browsers
 	if (window.visualViewport) {
@@ -182,7 +182,7 @@ function scale() {
 	// set up initial "map"
 	wMaxX = wX0;
 	wMaxY = wY0;
-	for (let i = 0; i < 12; i++) {
+	for (let i = 0; i < 8; i++) {
 		let deltaX = getRandomArbitrary(25, 38) * scaleX;
 		let deltaY = deltaX * tan * wDir0 * (1 - 2 * (wX.length % 2));
 		let newY = wMaxY + deltaY;
@@ -190,6 +190,10 @@ function scale() {
 		else {
 			wX.push(deltaX);
 			wMaxY = newY;
+			turners.push(null);
+			a1s.push(null);
+			a2s.push(null);
+			circles.push(null);
 		}
 	}
 
@@ -203,11 +207,70 @@ function scale() {
 		ge('game-over').classList.add('rotated');
 		ge('help').classList.add('rotated');
 		ge('status-bar').classList.add('rotated');
-		// console.log('rotated');
 	}
 }
 
 function draw() {
+	function flipTurner(i, x, y) {
+		let arrW = waw;
+
+		circles[i].setAttribute('cx', x);
+		circles[i].setAttribute('cy', y);
+		circles[i].setAttribute('r', 0.7 * arrW);
+
+		arrW *= 0.7;
+
+		a1s[i].setAttribute('d', `M${x - 3 * arrW / 8} ${y + arrW / 8} v${arrW / 4} h${arrW / 2} v${arrW / 8} l${arrW / 4} ${-arrW / 4} l${-arrW / 4} ${-arrW / 4} v${arrW / 8}z`);
+
+		a2s[i].setAttribute('d', `M${x + 3 * arrW / 8} ${y - arrW / 8} v${-arrW / 4} h${-arrW / 2} v${-arrW / 8} l${-arrW / 4} ${arrW / 4} l${arrW / 4} ${arrW / 4} v${-arrW / 8}z`);
+	}
+
+	function rotateTurner(i, x, y) {
+		let arrW = waw;
+
+		circles[i].setAttribute('cx', x);
+		circles[i].setAttribute('cy', y);
+		circles[i].setAttribute('r', 0.7 * arrW);
+
+		arrW *= 0.7;
+
+		a1s[i].setAttribute('d', `M${x - arrW / 2} ${y + 3 * arrW / 16} a${arrW / 2} ${arrW / 2} 0 1 0 ${arrW} ${0} h${arrW / 8} l${-arrW / 4} ${-arrW / 4} l${-arrW / 4} ${arrW / 4} h${arrW / 8} a${arrW / 4} ${arrW / 4} 0 1 1 ${-arrW / 2} ${0} z`);
+
+
+		a2s[i].setAttribute('d', `M${x + arrW / 2} ${y - 3 * arrW / 16} a${arrW / 2} ${arrW / 2} 0 1 0 ${-arrW} ${0} h${-arrW / 8} l${arrW / 4} ${arrW / 4} l${arrW / 4} ${-arrW / 4} h${-arrW / 8} a${arrW / 4} ${arrW / 4} 0 1 1 ${arrW / 2} ${0} z`);
+	}
+
+	const bubbles = {
+		'flip': flipTurner,
+		'rotate': rotateTurner
+	};
+
+	// walls
+	d1 = `M${wX0} ${wY0 + waw}`;
+	d2 = `M${wX0} ${wY0 - waw}`;
+
+	let temX = wX0;
+	let temY = wY0;
+
+	for (let i = 0; i < wX.length; i++) {
+		temX += wX[i];
+		temY += wX[i] * wDir0 * tan * (1 - 2 * (i % 2));
+		d1 += ` l${wX[i]} ${wX[i] * wDir0 * tan * (1 - 2 * (i % 2))}`;
+		d2 += ` l${wX[i]} ${wX[i] * wDir0 * tan * (1 - 2 * (i % 2))}`;
+
+		// turners
+		if (turners[i]) {
+			bubbles[turners[i]](i, temX, temY - 3 * waw * wDir0 * (1 - 2 * (i % 2)) / 16);
+		}
+	}
+
+	d1 += ` V${110 * scaleX} H${wX0} z`;
+	d2 += ` V${-10} H${wX0} z`;
+
+	bottom_wall.setAttribute('d', d1);
+	top_wall.setAttribute('d', d2);
+
+
 	// draw arrow
 	let d = `M${x0} ${y0 + aw}`;
 	for (let i = 0; i < xs.length - 1; i++)
@@ -216,34 +279,11 @@ function draw() {
 	dd = aw * cos / cosb;
 	d += ` l${dd * Math.sin(alpha * dir + beta)} ${dir * dd * Math.cos(alpha * dir + beta)}`;
 	d += ` l${- dd * Math.sin(- alpha * dir + beta)} ${- dd * Math.cos(- alpha * dir + beta)}`;
-	// d += ` l${2 * aw * cos * sin * dir} ${- 2 * aw * cos * cos}`;
 	d += ` l${- dir * aw * sin * cos - xs[xs.length - 1]} ${- aw * sin * sin - ys[xs.length - 1]}`;
-	// d += `v${- 2 * aw}`
 	for (let i = xs.length - 2; i >= 0; i--)
 		d += ` l${-xs[i]} ${-ys[i]}`;
 	d += 'z';
-
 	a.setAttribute('d', d);
-
-	// the ball
-	// c.setAttribute('cx', x);
-	// c.setAttribute('cy', y);
-
-	// walls
-
-	d1 = `M${wX0} ${wY0 + waw}`;
-	d2 = `M${wX0} ${wY0 - waw}`;
-
-	for (let i = 0; i < wX.length; i++) {
-		d1 += ` l${wX[i]} ${wX[i] * wDir0 * tan * (1 - 2 * (i % 2))}`;
-		d2 += ` l${wX[i]} ${wX[i] * wDir0 * tan * (1 - 2 * (i % 2))}`;
-	}
-
-	d1 += ` V${110 * scaleX} H${wX0} z`;
-	d2 += ` V${-10} H${wX0} z`;
-
-	bottom_wall.setAttribute('d', d1);
-	top_wall.setAttribute('d', d2);
 }
 
 function moveArrow() {
@@ -251,6 +291,8 @@ function moveArrow() {
 	ys[ys.length - 1] += dx * tan * dir;
 }
 
+let turnIndex = 0;
+let lastTurnIndex = turnIndex;
 
 function moveScreen() {
 	x0 -= dx;
@@ -263,6 +305,11 @@ function moveScreen() {
 		wY0 += wX[0] * wDir0 * tan;
 		wDir0 *= -1;
 		wX0 += wX.shift();
+		turners.shift();
+		let asdasd = a1s.shift(); if (asdasd) asdasd.remove();
+		asdasd = a2s.shift(); if (asdasd) asdasd.remove();
+		asdasd = circles.shift(); if (asdasd) asdasd.remove();
+
 
 		for (let i = 0; i < 1; i++) {
 			let deltaX = getRandomArbitrary(25 - 18 * Math.min(score / 70, 1), 38) * scaleX;
@@ -272,14 +319,46 @@ function moveScreen() {
 			else {
 				wX.push(deltaX);
 				wMaxY = newY;
+				if (turnIndex - lastTurnIndex >= 10 && getRandomArbitrary(1, 100) > 50) {
+					lastTurnIndex = turnIndex;
+					turners.push(turnTypes[getRandomInteger(turnTypes.length)]);
+
+					var circ = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+					circ.classList.add('turner');
+					ge('svg').appendChild(circ);
+					circles.push(circ);
+
+					var a1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+					a1.classList.add('turner');
+					ge('svg').appendChild(a1);
+					a1s.push(a1);
+
+					var a2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+					a2.classList.add('turner', 'inverted');
+					ge('svg').appendChild(a2);
+					a2s.push(a2);
+
+					if (inverted) {
+						circ.classList.toggle('inverted');
+						a1.classList.toggle('inverted');
+						a2.classList.toggle('inverted');
+					}
+				}
+				else {
+					turners.push(null);
+					a1s.push(null);
+					a2s.push(null);
+					circles.push(null);
+				}
+
 			}
 		}
-
-		// console.log(wX.length);
+		turnIndex++;
 	}
 }
 
 let startedTiming = false;
+let nextTurnX = -1111;
 
 function move() {
 	if (startedTiming) {
@@ -303,6 +382,35 @@ function move() {
 		x += dx;
 	else
 		moveScreen();
+
+	// check for turn
+	if (nextTurnX == -1111) {
+		let temp = wX0;
+		for (let i = 0; i < wX.length; ++i) {
+			temp += wX[i];
+			if (turners[i]) {
+				nextTurnX = temp;
+				break;
+			}
+		}
+	}
+	else {
+		nextTurnX -= dx;
+		if (nextTurnX < xLine) {
+			for (let i = 0; i < turners.length; i++)
+				if (turners[i]) {
+					turningFunctons[turners[i]]();
+					turners[i] = null;
+					a1s[i].style.display = 'none';
+					a2s[i].style.display = 'none';
+					circles[i].style.display = 'none';
+					nextTurnX = -1111;
+					break;
+				}
+		}
+	}
+
+
 	draw();
 }
 
@@ -337,22 +445,18 @@ function zigzag() {
 		x.innerHTML = score;
 	});
 
-	if (score - colorInitialScore > minTunrsBeforeColorFlip && getRandomArbitrary(1, 100) > 90) {
+	if (score - colorInitialScore > minTunrsBeforeColorFlip && getRandomArbitrary(1, 100) > 50) {
 		colorFlip();
 	}
-
-	if (score >= 30 && score % 10 == 0 && getRandomArbitrary(0, 100) > 50)
-		if (getRandomArbitrary(0, 100) > 50)
-			rotateScreen();
-		else
-			flipScreenX();
 }
 
 function colorFlip() {
+	inverted = !inverted;
 	colorInitialScore = score;
 	ge('back').classList.toggle('inverted')
 	document.getElementsByTagName('rect')[0].classList.toggle('inverted');
 	[...document.getElementsByTagName('path')].forEach(x => x.classList.toggle('inverted'));
+	[...document.querySelectorAll('circle')].forEach(x => x.classList.toggle('inverted'));
 }
 
 function rotateScreen() {
@@ -364,6 +468,13 @@ function flipScreenX() {
 	svg.style.transition = ' transform .2s linear';
 	ge('svg').style.transform += ' scaleX(-1)';
 }
+
+const turningFunctons = {
+	'flip': flipScreenX,
+	'rotate': rotateScreen
+};
+
+const turnTypes = ['flip', 'rotate'];
 
 function collision() {
 	let tipX = x + aw * cos * tanb * cos;
@@ -402,11 +513,6 @@ function gameOverDialog() {
 
 // the scores comunication
 function sendScore() {
-	// var formData = new FormData();
-
-	// formData.append('user_id', userId);
-	// formData.append('score', theScore);
-
 	xhr = new XMLHttpRequest();
 	xhr.open('POST', 'https://maxwellgamesbot.herokuapp.com/setScore', true);
 	xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -453,12 +559,6 @@ function setScoreBoardHTML(scoreList) {
 			});
 	}
 }
-
-
-
-
-
-
 
 
 function main() {
