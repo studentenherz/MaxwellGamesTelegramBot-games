@@ -461,7 +461,7 @@ function colorFlip() {
 
 function rotateScreen() {
 	svg.style.transition = ' transform 2s ease-in-out';
-	ge('svg').style.transform += ' rotate(- 180deg)';
+	ge('svg').style.transform += ' rotate(-180deg)';
 }
 
 function flipScreenX() {
