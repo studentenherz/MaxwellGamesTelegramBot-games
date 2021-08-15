@@ -182,7 +182,7 @@ function scale() {
 	// set up initial "map"
 	wMaxX = wX0;
 	wMaxY = wY0;
-	for (let i = 0; i < 8; i++) {
+	for (let i = 0; i < 12; i++) {
 		let deltaX = getRandomArbitrary(25, 38) * scaleX;
 		let deltaY = deltaX * tan * wDir0 * (1 - 2 * (wX.length % 2));
 		let newY = wMaxY + deltaY;
