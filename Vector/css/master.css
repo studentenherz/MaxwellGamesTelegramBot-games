@@ -320,3 +320,25 @@ h3{
 	transform-origin: left top;
 	transform: rotate(90deg);
 }
+
+.flip-arrow{
+	animation: wiggle-x infinite 1s ease-in-out alternate;
+}
+
+.flip-arrow.inverted{
+	animation: wiggle-x infinite 1s ease-in-out alternate-reverse;
+}
+
+.rotate-arrow{
+	animation: swing infinite 2s linear;
+}
+
+@keyframes wiggle-x {
+	0% {transform: translateX(5px);}
+	100% {transform: translateX(-5px);}
+}
+
+@keyframes swing {
+	0% {transform: rotate(0deg);}
+	100% {transform: rotate(-360deg);}
+}

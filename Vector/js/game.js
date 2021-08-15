@@ -221,7 +221,6 @@ function draw() {
 		arrW *= 0.7;
 
 		a1s[i].setAttribute('d', `M${x - 3 * arrW / 8} ${y + arrW / 8} v${arrW / 4} h${arrW / 2} v${arrW / 8} l${arrW / 4} ${-arrW / 4} l${-arrW / 4} ${-arrW / 4} v${arrW / 8}z`);
-
 		a2s[i].setAttribute('d', `M${x + 3 * arrW / 8} ${y - arrW / 8} v${-arrW / 4} h${-arrW / 2} v${-arrW / 8} l${-arrW / 4} ${arrW / 4} l${arrW / 4} ${arrW / 4} v${-arrW / 8}z`);
 	}
 
@@ -234,10 +233,15 @@ function draw() {
 
 		arrW *= 0.7;
 
-		a1s[i].setAttribute('d', `M${x - arrW / 2} ${y + 3 * arrW / 16} a${arrW / 2} ${arrW / 2} 0 1 0 ${arrW} ${0} h${arrW / 8} l${-arrW / 4} ${-arrW / 4} l${-arrW / 4} ${arrW / 4} h${arrW / 8} a${arrW / 4} ${arrW / 4} 0 1 1 ${-arrW / 2} ${0} z`);
+		const r = 0.6 * arrW;
+		const angle = 0.2 * Math.PI;
+		// let delta = 0.35 * arrW;
 
+		a1s[i].style.transformOrigin = `${x}px ${y}px`;
+		a2s[i].style.transformOrigin = `${x}px ${y}px`;
 
-		a2s[i].setAttribute('d', `M${x + arrW / 2} ${y - 3 * arrW / 16} a${arrW / 2} ${arrW / 2} 0 1 0 ${-arrW} ${0} h${-arrW / 8} l${arrW / 4} ${arrW / 4} l${arrW / 4} ${-arrW / 4} h${-arrW / 8} a${arrW / 4} ${arrW / 4} 0 1 1 ${arrW / 2} ${0} z`);
+		a1s[i].setAttribute('d', `M${x - r * Math.cos(angle)} ${y + r * Math.sin(angle)} A${r} ${r} 0 0 0 ${x + r} ${y} h${arrW / 8} l${-arrW / 4} ${-arrW / 4} l${-arrW / 4} ${arrW / 4} h${arrW / 8} A${r - arrW / 4} ${r - arrW / 4} 0 0 1 ${x - (r - arrW / 4) * Math.cos(angle)} ${y + (r - arrW / 4) * Math.sin(angle)} z`);
+		a2s[i].setAttribute('d', `M${x + r * Math.cos(angle)} ${y - r * Math.sin(angle)} A${r} ${r} 0 0 0 ${x - r} ${y} h${-arrW / 8} l${arrW / 4} ${arrW / 4} l${arrW / 4} ${-arrW / 4} h${-arrW / 8} A${r - arrW / 4} ${r - arrW / 4} 0 0 1 ${x + (r - arrW / 4) * Math.cos(angle)} ${y - (r - arrW / 4) * Math.sin(angle)} z`);
 	}
 
 	const bubbles = {
@@ -269,7 +273,6 @@ function draw() {
 
 	bottom_wall.setAttribute('d', d1);
 	top_wall.setAttribute('d', d2);
-
 
 	// draw arrow
 	let d = `M${x0} ${y0 + aw}`;
@@ -321,7 +324,8 @@ function moveScreen() {
 				wMaxY = newY;
 				if (turnIndex - lastTurnIndex >= 10 && getRandomArbitrary(1, 100) > 50) {
 					lastTurnIndex = turnIndex;
-					turners.push(turnTypes[getRandomInteger(turnTypes.length)]);
+					const turnType = turnTypes[getRandomInteger(turnTypes.length)];
+					turners.push(turnType);
 
 					var circ = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
 					circ.classList.add('turner');
@@ -329,12 +333,12 @@ function moveScreen() {
 					circles.push(circ);
 
 					var a1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-					a1.classList.add('turner');
+					a1.classList.add('turner', `${turnType}-arrow`);
 					ge('svg').appendChild(a1);
 					a1s.push(a1);
 
 					var a2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-					a2.classList.add('turner', 'inverted');
+					a2.classList.add('turner', 'inverted', `${turnType}-arrow`);
 					ge('svg').appendChild(a2);
 					a2s.push(a2);
 
