@@ -13,6 +13,7 @@ function ge(id) {
 // constants
 const aspect_ratio = 0.55;		// height/ width
 const portion = 1				// portion of the width allocated
+const fps = 40;
 
 let xLine = 40;				// line in which the arrow stays: NEEDS TO BE SCALED
 
@@ -361,74 +362,80 @@ function moveScreen() {
 	}
 }
 
-let startedTiming = false;
 let nextTurnX = -1111;
 
-function move() {
-	if (startedTiming) {
-		timeNow = Date.now();
-		let realDt = (timeNow - startTime);
-		dx = v * realDt * scaleX;
-	}
-	else {
-		startedTiming = true;
-	}
-	timeNow = Date.now();
-	startTime = timeNow;
-
-	if (collision()) {
-		toggle();
-		gameOverDialog();
-	}
-	moveArrow();
-	y += dx * tan * dir;
-	if (x < xLine)
-		x += dx;
-	else
-		moveScreen();
-
-	// check for turn
-	if (nextTurnX == -1111) {
-		let temp = wX0;
-		for (let i = 0; i < wX.length; ++i) {
-			temp += wX[i];
-			if (turners[i]) {
-				nextTurnX = temp;
-				break;
-			}
-		}
-	}
-	else {
-		nextTurnX -= dx;
-		if (nextTurnX < xLine) {
-			for (let i = 0; i < turners.length; i++)
-				if (turners[i]) {
-					turningFunctons[turners[i]]();
-					turners[i] = null;
-					a1s[i].style.display = 'none';
-					a2s[i].style.display = 'none';
-					circles[i].style.display = 'none';
-					nextTurnX = -1111;
-					break;
-				}
-		}
-	}
 
 
-	draw();
+
+// function toggle() {
+// 	if (gameOver) return;
+// 	if (!playing) {
+// 		interval = setInterval(move, dt);
+// 		playing = true;
+// 	}
+// 	else {
+// 		clearInterval(interval);
+// 		playing = false;
+// 	}
+// }
+
+let lastTime, fpsInterval;
+
+function startAnimating() {
+	fpsInterval = 1000 / fps;
+	lastTime = Date.now();
+	playing = true;
+	requestAnimationFrame(move)
 }
 
+function move() {
+	timeNow = Date.now();
+	let realDt = (timeNow - lastTime);
+	console.log(realDt);
+	if (realDt > fpsInterval) {
+		dx = v * realDt * scaleX;
+		lastTime = timeNow - (realDt % fpsInterval);
+		if (collision()) {
+			playing = false;
+			gameOverDialog();
+		}
+		moveArrow();
+		y += dx * tan * dir;
+		if (x < xLine)
+			x += dx;
+		else
+			moveScreen();
 
-function toggle() {
-	if (gameOver) return;
-	if (!playing) {
-		interval = setInterval(move, dt);
-		playing = true;
+		// check for turn
+		if (nextTurnX == -1111) {
+			let temp = wX0;
+			for (let i = 0; i < wX.length; ++i) {
+				temp += wX[i];
+				if (turners[i]) {
+					nextTurnX = temp;
+					break;
+				}
+			}
+		}
+		else {
+			nextTurnX -= dx;
+			if (nextTurnX < xLine) {
+				for (let i = 0; i < turners.length; i++)
+					if (turners[i]) {
+						turningFunctons[turners[i]]();
+						turners[i] = null;
+						a1s[i].style.display = 'none';
+						a2s[i].style.display = 'none';
+						circles[i].style.display = 'none';
+						nextTurnX = -1111;
+						break;
+					}
+			}
+		}
+
+		draw();
 	}
-	else {
-		clearInterval(interval);
-		playing = false;
-	}
+	if (playing) requestAnimationFrame(move);
 }
 
 let colorInitialScore = 0;
@@ -437,7 +444,8 @@ const minTunrsBeforeColorFlip = 10;
 function zigzag() {
 	// console.log('zigzag');
 	if (!playing) {
-		toggle();
+		// toggle();
+		startAnimating()
 		ge('help').style.display = 'none';
 		return;
 	}
