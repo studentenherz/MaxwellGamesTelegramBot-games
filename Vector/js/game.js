@@ -13,7 +13,6 @@ function ge(id) {
 // constants
 const aspect_ratio = 0.55;		// height/ width
 const portion = 1				// portion of the width allocated
-const fps = 40;
 
 let xLine = 40;				// line in which the arrow stays: NEEDS TO BE SCALED
 
@@ -56,9 +55,6 @@ let ys = [0];
 
 let x;
 let y;
-
-let startTime = new Date();
-let timeNow = new Date();
 
 // Generate levels from turn points
 let wX0 = 0; 				// walls initial x
@@ -379,63 +375,66 @@ let nextTurnX = -1111;
 // 	}
 // }
 
-let lastTime, fpsInterval;
+let lastTime, animationRequest;
 
 function startAnimating() {
-	fpsInterval = 1000 / fps;
 	lastTime = Date.now();
 	playing = true;
-	requestAnimationFrame(move)
+	window.requestAnimationFrame(preMove)
 }
 
-function move() {
-	timeNow = Date.now();
-	let realDt = (timeNow - lastTime);
-	console.log(realDt);
-	if (realDt > fpsInterval) {
-		dx = v * realDt * scaleX;
-		lastTime = timeNow - (realDt % fpsInterval);
-		if (collision()) {
-			playing = false;
-			gameOverDialog();
-		}
-		moveArrow();
-		y += dx * tan * dir;
-		if (x < xLine)
-			x += dx;
-		else
-			moveScreen();
+function preMove(timestamp) {
+	lastTime = timestamp;
+	window.requestAnimationFrame(move)
+}
 
-		// check for turn
-		if (nextTurnX == -1111) {
-			let temp = wX0;
-			for (let i = 0; i < wX.length; ++i) {
-				temp += wX[i];
+function move(timestamp) {
+	animationRequest = window.requestAnimationFrame(move);
+	const realDt = timestamp - lastTime;
+	console.log(realDt);
+	// if (realDt > fpsInterval) {
+	dx = v * realDt * scaleX;
+	lastTime = timestamp;
+	if (collision()) {
+		window.cancelAnimationFrame(animationRequest)
+		gameOverDialog();
+	}
+	moveArrow();
+	y += dx * tan * dir;
+	if (x < xLine)
+		x += dx;
+	else
+		moveScreen();
+
+	// check for turn
+	if (nextTurnX == -1111) {
+		let temp = wX0;
+		for (let i = 0; i < wX.length; ++i) {
+			temp += wX[i];
+			if (turners[i]) {
+				nextTurnX = temp;
+				break;
+			}
+		}
+	}
+	else {
+		nextTurnX -= dx;
+		if (nextTurnX < xLine) {
+			for (let i = 0; i < turners.length; i++)
 				if (turners[i]) {
-					nextTurnX = temp;
+					turningFunctons[turners[i]]();
+					turners[i] = null;
+					a1s[i].style.display = 'none';
+					a2s[i].style.display = 'none';
+					circles[i].style.display = 'none';
+					nextTurnX = -1111;
 					break;
 				}
-			}
 		}
-		else {
-			nextTurnX -= dx;
-			if (nextTurnX < xLine) {
-				for (let i = 0; i < turners.length; i++)
-					if (turners[i]) {
-						turningFunctons[turners[i]]();
-						turners[i] = null;
-						a1s[i].style.display = 'none';
-						a2s[i].style.display = 'none';
-						circles[i].style.display = 'none';
-						nextTurnX = -1111;
-						break;
-					}
-			}
-		}
-
-		draw();
 	}
-	if (playing) requestAnimationFrame(move);
+
+	draw();
+	// }
 }
 
 let colorInitialScore = 0;
