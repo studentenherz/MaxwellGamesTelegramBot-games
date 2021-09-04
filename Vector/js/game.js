@@ -391,7 +391,7 @@ function preMove(timestamp) {
 function move(timestamp) {
 	animationRequest = window.requestAnimationFrame(move);
 	const realDt = timestamp - lastTime;
-	console.log(realDt);
+	// console.log(realDt);
 	// if (realDt > fpsInterval) {
 	dx = v * realDt * scaleX;
 	lastTime = timestamp;
