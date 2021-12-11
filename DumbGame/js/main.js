@@ -1,3 +1,5 @@
+serverURL = 'https://magiclobster.ml'
+
 var theScore = 0;
 var color = randomColors();
 
@@ -46,7 +48,7 @@ function sendScore() {
 	// formData.append('score', theScore);
 
 	xhr = new XMLHttpRequest();
-	xhr.open('POST', 'https://maxwellgamesbot.herokuapp.com/setScore', true);
+	xhr.open('POST', `${serverURL}/setScore`, true);
 	xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 	xhr.send(JSON.stringify({ data: TelegramGameProxy.initParams['data'], score: theScore }));
 	// xhr.send(formData);
@@ -61,7 +63,7 @@ function sendScore() {
 
 function getScoreBoard() {
 	xhr = new XMLHttpRequest();
-	xhr.open('GET', `https://maxwellgamesbot.herokuapp.com/getScoreBoard?data=${TelegramGameProxy.initParams['data']}`, true);
+	xhr.open('GET', `${serverURL}/getScoreBoard?data=${TelegramGameProxy.initParams['data']}`, true);
 	xhr.onreadystatechange = function () {
 		if (xhr.readyState == 4 && xhr.status == 200) {
 			var resp = JSON.parse(xhr.responseText);
