@@ -5,7 +5,7 @@ touching the screen changes the movement direction.
 Author: stedentenherz
 ****************************************************************/
 
-serverURL = 'https://magiclobster.ml'
+serverURL = 'https://maxwellgamesbot.sth-telegram-wh.tk'
 
 function ge(id) {
 	return document.getElementById(id);

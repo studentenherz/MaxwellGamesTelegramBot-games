@@ -1,4 +1,4 @@
-serverURL = 'https://magiclobster.ml'
+serverURL = 'https://maxwellgamesbot.sth-telegram-wh.tk'
 
 var theScore = 0;
 var color = randomColors();
