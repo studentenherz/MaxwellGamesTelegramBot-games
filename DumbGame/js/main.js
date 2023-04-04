@@ -1,4 +1,4 @@
-serverURL = 'https://maxwellgamesbot.sth-telegram-wh.tk'
+serverURL = 'https://maxwellgamesbot.mooo.com'
 
 var theScore = 0;
 var color = randomColors();
