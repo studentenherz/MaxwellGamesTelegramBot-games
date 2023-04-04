@@ -5,7 +5,7 @@ touching the screen changes the movement direction.
 Author: stedentenherz
 ****************************************************************/
 
-serverURL = 'https://maxwellgamesbot.sth-telegram-wh.tk'
+serverURL = 'https://maxwellgamesbot.mooo.com'
 
 function ge(id) {
 	return document.getElementById(id);
